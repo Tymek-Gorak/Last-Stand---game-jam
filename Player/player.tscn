@@ -1,0 +1,37 @@
+[gd_scene load_steps=7 format=3 uid="uid://cico272iebs5x"]
+
+[ext_resource type="Script" path="res://Player/player.gd" id="1_kj5km"]
+[ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_lnvoh"]
+[ext_resource type="Script" path="res://Player/WalkState.gd" id="3_1v227"]
+[ext_resource type="Script" path="res://Player/PlayerStateMachine.gd" id="3_qynhh"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xvm6y"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_lnvoh")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wkvmc"]
+radius = 70.0
+height = 140.0
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_kj5km")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_xvm6y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_wkvmc")
+
+[node name="PlayerStateMachine" type="Node" parent="." node_paths=PackedStringArray("curr_state")]
+script = ExtResource("3_qynhh")
+curr_state = NodePath("WalkState")
+
+[node name="WalkState" type="Node" parent="PlayerStateMachine"]
+script = ExtResource("3_1v227")

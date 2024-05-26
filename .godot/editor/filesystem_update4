@@ -1,0 +1,8 @@
+res://Player/player.tscn
+res://common/state_machine.gd
+res://common/StateBase.gd
+res://common/StateMachine.gd
+res://common/State.gd
+res://Player/WalkState.gd
+res://Player/player.gd
+res://Player/PlayerStateMachine.gd
