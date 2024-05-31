@@ -1,9 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://cico272iebs5x"]
+[gd_scene load_steps=11 format=3 uid="uid://cico272iebs5x"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_kj5km"]
 [ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_lnvoh"]
 [ext_resource type="Script" path="res://Player/WalkState.gd" id="3_1v227"]
+[ext_resource type="Script" path="res://common/Hurtbox.gd" id="3_41d84"]
 [ext_resource type="Script" path="res://Player/PlayerStateMachine.gd" id="3_qynhh"]
+[ext_resource type="Script" path="res://Player/RollState.gd" id="5_pperi"]
+[ext_resource type="Script" path="res://Player/AttackState.gd" id="6_jau3v"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_xvm6y"]
 animations = [{
@@ -17,21 +20,52 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wkvmc"]
-radius = 70.0
-height = 140.0
+radius = 64.0
+height = 128.0
 
-[node name="Player" type="CharacterBody2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k1uiq"]
+size = Vector2(176, 187)
+
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
+collision_mask = 0
 script = ExtResource("1_kj5km")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
 sprite_frames = SubResource("SpriteFrames_xvm6y")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_wkvmc")
+
+[node name="HammerHurtbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+monitoring = false
+monitorable = false
+script = ExtResource("3_41d84")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HammerHurtbox"]
+position = Vector2(176, 0)
+shape = SubResource("RectangleShape2D_k1uiq")
+debug_color = Color(1, 0, 0.145098, 0.419608)
 
 [node name="PlayerStateMachine" type="Node" parent="." node_paths=PackedStringArray("curr_state")]
 script = ExtResource("3_qynhh")
 curr_state = NodePath("WalkState")
 
 [node name="WalkState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
 script = ExtResource("3_1v227")
+
+[node name="AttackCooldownTimer" type="Timer" parent="PlayerStateMachine/WalkState"]
+unique_name_in_owner = true
+wait_time = 0.8
+one_shot = true
+autostart = true
+
+[node name="RollState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("5_pperi")
+
+[node name="AttackState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("6_jau3v")

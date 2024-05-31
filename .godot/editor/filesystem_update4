@@ -1,8 +1,7 @@
-res://Player/player.tscn
-res://common/state_machine.gd
-res://common/StateBase.gd
+res://Enemies/throwing_sword.tscn
 res://common/StateMachine.gd
-res://common/State.gd
-res://Player/WalkState.gd
-res://Player/player.gd
-res://Player/PlayerStateMachine.gd
+res://Enemies/throwing_sword.gd
+res://Player/player.tscn
+res://Enemies/SwordThrowState.gd
+res://Enemies/bread_boss.tscn
+res://Scene-Scenes/battle.tscn

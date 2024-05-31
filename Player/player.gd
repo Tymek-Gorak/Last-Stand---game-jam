@@ -6,3 +6,7 @@ class_name Player
 
 @export var speed := 50
 @export var friction := 20
+@export var attack_pull_speed := 3000
+@export var roll_speed := 2000
+
+

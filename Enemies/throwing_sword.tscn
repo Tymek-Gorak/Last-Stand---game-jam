@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://duwiu5lgga3mv"]
+
+[ext_resource type="Script" path="res://Enemies/throwing_sword.gd" id="1_kbyt6"]
+[ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_uh1xv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dsnb3"]
+radius = 250.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_t4xjj"]
+height = 62.0
+
+[node name="ThrowingSword" type="Node2D"]
+script = ExtResource("1_kbyt6")
+
+[node name="Sword" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+scale = Vector2(1, 0.171875)
+texture = ExtResource("1_uh1xv")
+
+[node name="DamageZoneHurtbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageZoneHurtbox"]
+shape = SubResource("CircleShape2D_dsnb3")
+debug_color = Color(0.690196, 0.498039, 0.105882, 0.282353)
+
+[node name="PickupRange" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupRange"]
+position = Vector2(0, -17)
+shape = SubResource("CapsuleShape2D_t4xjj")
+
+[connection signal="body_entered" from="PickupRange" to="." method="_on_pickup_range_body_entered"]
