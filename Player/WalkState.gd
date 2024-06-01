@@ -1,4 +1,5 @@
-extends State
+extends BaseMovementState
+class_name WalkState
 
 func _ready():
 	pass
@@ -9,19 +10,19 @@ func _process(delta):
 		move_vector = a.velocity.move_toward(move_vector * a.MAX_SPEED, a.speed)
 	else: 
 		move_vector = a.velocity.move_toward(Vector2.ZERO, a.friction)
+	a.velocity = move_vector
+	a.move_and_slide()
+	
+	if a.velocity.is_zero_approx():
+		go_idle()
 	
 	if Input.is_action_just_pressed("roll"):
 		roll()
-		
-	if Input.is_action_just_pressed("attack_primary") and %AttackCooldownTimer.time_left == 0:
-		attack()
 	
-	a.velocity = move_vector
-	a.move_and_slide()
+	super._process(delta)
+	
+func go_idle():
+	get_parent().change_state(%IdleState)
 
 func roll():
 	get_parent().change_state(%RollState)
-
-func attack():
-	get_parent().change_state(%AttackState)
-	%AttackCooldownTimer.start()

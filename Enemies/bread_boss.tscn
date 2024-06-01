@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bnn0dti8ekdi4"]
+[gd_scene load_steps=17 format=3 uid="uid://bnn0dti8ekdi4"]
 
 [ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_h53fk"]
 [ext_resource type="Script" path="res://Enemies/BreadBoss.gd" id="1_l2dgg"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://Enemies/AOECircleAttackState.gd" id="6_cawsf"]
 [ext_resource type="Script" path="res://Enemies/SwordThrowState.gd" id="7_umuil"]
 [ext_resource type="PackedScene" uid="uid://duwiu5lgga3mv" path="res://Enemies/throwing_sword.tscn" id="8_7l5v5"]
+[ext_resource type="Script" path="res://Enemies/DazedState.gd" id="9_x0l7g"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uiftm"]
 radius = 66.0
@@ -31,7 +32,7 @@ height = 160.0
 
 [node name="BreadBoss" type="CharacterBody2D" groups=["BreadBoss"]]
 collision_layer = 2
-collision_mask = 0
+collision_mask = 4
 script = ExtResource("1_l2dgg")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -41,6 +42,17 @@ texture = ExtResource("1_h53fk")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_uiftm")
 debug_color = Color(0, 0.6, 0.701961, 0.156863)
+
+[node name="Hitbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("5_sfvqo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_hnprp")
+debug_color = Color(0.458824, 0.592157, 0.141176, 0.419608)
 
 [node name="BreadBossStateMachine" type="Node" parent="." node_paths=PackedStringArray("curr_state")]
 unique_name_in_owner = true
@@ -64,20 +76,17 @@ unique_name_in_owner = true
 script = ExtResource("7_umuil")
 throwing_sword = ExtResource("8_7l5v5")
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="DazedState" type="Node" parent="BreadBossStateMachine"]
 unique_name_in_owner = true
-monitorable = false
-script = ExtResource("5_sfvqo")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-shape = SubResource("RectangleShape2D_hnprp")
-debug_color = Color(0.458824, 0.592157, 0.141176, 0.419608)
+script = ExtResource("9_x0l7g")
 
 [node name="SwordSlashHurtbox" type="Area2D" parent="."]
 unique_name_in_owner = true
+collision_mask = 0
 monitoring = false
 monitorable = false
 script = ExtResource("4_rvma2")
+damage = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SwordSlashHurtbox"]
 position = Vector2(147, 0)
@@ -86,9 +95,11 @@ debug_color = Color(0.831373, 0.360784, 0.423529, 0.419608)
 
 [node name="AOECircleHurtbox" type="Area2D" parent="."]
 unique_name_in_owner = true
+collision_mask = 0
 monitoring = false
 monitorable = false
 script = ExtResource("4_rvma2")
+damage = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AOECircleHurtbox"]
 shape = SubResource("CircleShape2D_0dgej")
@@ -96,9 +107,11 @@ debug_color = Color(0.603922, 0.541176, 0, 0.0901961)
 
 [node name="LungeHurtbox" type="Area2D" parent="."]
 unique_name_in_owner = true
+collision_mask = 0
 monitoring = false
 monitorable = false
 script = ExtResource("4_rvma2")
+damage = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LungeHurtbox"]
 rotation = 1.57079

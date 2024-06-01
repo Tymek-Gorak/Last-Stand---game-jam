@@ -6,7 +6,7 @@ class_name BreadBossSlashState
 
 func _enter_state():
 	super._enter_state()
-	%PlayerPointer.rotate(clamp(%PlayerPointer.get_angle_to(p.position), -TAU / 4, TAU / 4))
+	%PlayerPointer.rotate(clamp(%PlayerPointer.get_angle_to(p.position), -TAU / randf_range(3.5,4.5), TAU / randf_range(3.5,4.5)))
 	%SwordSlashHurtbox.rotation = %PlayerPointer.rotation
 	a.velocity = %PlayerPointer.target_position.normalized().rotated(%PlayerPointer.rotation)
 	var tween = create_tween()
