@@ -12,9 +12,9 @@ signal died
 
 
 
-
+##passes up the signal from the hitbox for other nodes to access 
 func _on_hitbox_died():
-	died.emit()
+	died.emit(self)
 	
 	
 	

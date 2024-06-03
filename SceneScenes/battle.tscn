@@ -1,14 +1,33 @@
-[gd_scene load_steps=9 format=3 uid="uid://dn78tplcqg4t1"]
+[gd_scene load_steps=12 format=3 uid="uid://dn78tplcqg4t1"]
 
 [ext_resource type="PackedScene" uid="uid://cico272iebs5x" path="res://Player/player.tscn" id="1_dl5od"]
 [ext_resource type="PackedScene" uid="uid://bnn0dti8ekdi4" path="res://Enemies/bread_boss.tscn" id="2_yrrkd"]
 [ext_resource type="PackedScene" uid="uid://dobcaeotnlg6a" path="res://Enemies/bread_boss_health_bar.tscn" id="3_1nyys"]
+[ext_resource type="PackedScene" uid="uid://dpt0umggbj3se" path="res://SceneScenes/flashback.tscn" id="3_pfpvm"]
 
 [sub_resource type="GDScript" id="GDScript_hxocf"]
 script/source = "extends Node2D
 
 func _ready():
 	%AnimationPlayer.play(\"start_battle\")
+"
+
+[sub_resource type="GDScript" id="GDScript_je2mp"]
+script/source = "extends Camera2D
+
+@export var flashback_scene : PackedScene
+
+
+func _on_player_died(player: Player):
+	var tween = create_tween().set_parallel().set_ease(Tween.EASE_OUT)
+	tween.tween_interval(1)
+	tween.tween_property(self, \"position\", player.position, 2)
+	tween.tween_property(self, \"zoom\", zoom * 2.5, 2)
+	tween.chain().tween_interval(1)
+	tween.chain().tween_callback(have_flashback)
+
+func have_flashback():
+	get_tree().change_scene_to_packed(flashback_scene)
 "
 
 [sub_resource type="GDScript" id="GDScript_63x34"]
@@ -18,21 +37,6 @@ script/source = "extends ProgressBar
 func _on_bread_boss_took_damage(hurtbox, remaining_health):
 	value = remaining_health
 "
-
-[sub_resource type="Animation" id="Animation_ykyrj"]
-resource_name = "start_battle"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/Control/ColorRect:color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1.62451, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
 
 [sub_resource type="Animation" id="Animation_sp0h3"]
 length = 0.001
@@ -49,10 +53,80 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_ykyrj"]
+resource_name = "start_battle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/Control/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1.62451, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_fh4id"]
+resource_name = "training waves"
+length = 20.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2, 3, 5.8, 7.5, 8.6, 10, 11.6, 13.1, 14.8, 14.9, 17, 17.1, 19.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"values": [{
+"args": [20],
+"method": &"wave_left"
+}, {
+"args": [40],
+"method": &"wave_up"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_right"
+}, {
+"args": [40],
+"method": &"wave_right"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_up"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_right"
+}, {
+"args": [40],
+"method": &"wave_up"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_left"
+}, {
+"args": [Vector2(1103, 463)],
+"method": &"summon_training_dummy"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ofjux"]
 _data = {
 "RESET": SubResource("Animation_sp0h3"),
-"start_battle": SubResource("Animation_ykyrj")
+"start_battle": SubResource("Animation_ykyrj"),
+"training waves": SubResource("Animation_fh4id")
 }
 
 [node name="Battle" type="Node2D"]
@@ -68,6 +142,8 @@ position = Vector2(1769, 663)
 position = Vector2(1152, 648)
 scale = Vector2(1.15191, 0.64581)
 zoom = Vector2(0.5, 0.5)
+script = SubResource("GDScript_je2mp")
+flashback_scene = ExtResource("3_pfpvm")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 10
@@ -78,6 +154,7 @@ anchor_right = 2.0
 anchor_bottom = 1.998
 offset_right = -1152.0
 offset_bottom = -646.704
+metadata/_edit_use_anchors_ = true
 
 [node name="BreadBossHealthBar" parent="CanvasLayer/Control" instance=ExtResource("3_1nyys")]
 layout_mode = 1
@@ -96,6 +173,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
+metadata/_edit_use_anchors_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true
@@ -103,4 +181,5 @@ libraries = {
 "": SubResource("AnimationLibrary_ofjux")
 }
 
+[connection signal="died" from="Player" to="Camera2D" method="_on_player_died"]
 [connection signal="took_damage" from="BreadBoss" to="CanvasLayer/Control/BreadBossHealthBar" method="_on_bread_boss_took_damage"]

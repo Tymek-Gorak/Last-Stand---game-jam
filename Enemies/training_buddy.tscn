@@ -1,0 +1,119 @@
+[gd_scene load_steps=12 format=3 uid="uid://c6q443gp4t55f"]
+
+[ext_resource type="Script" path="res://Enemies/training_buddy.gd" id="1_3jo0g"]
+[ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_qgs14"]
+[ext_resource type="Script" path="res://common/Hitbox.gd" id="2_7o6kw"]
+[ext_resource type="Script" path="res://common/DamageTakenState.gd" id="3_gscon"]
+[ext_resource type="PackedScene" uid="uid://dqmhyn5wetdc" path="res://Enemies/enemy_death_particles.tscn" id="5_nwno1"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_87u6k"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_qgs14")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wv38o"]
+size = Vector2(120, 118)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gc661"]
+size = Vector2(100, 98)
+
+[sub_resource type="Animation" id="Animation_euh26"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyDeathParticles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ei5ro"]
+resource_name = "die"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyDeathParticles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3, 1.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"prep_for_death"
+}, {
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gb6ie"]
+_data = {
+"RESET": SubResource("Animation_euh26"),
+"die": SubResource("Animation_ei5ro")
+}
+
+[node name="TrainingBuddy" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_3jo0g")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+sprite_frames = SubResource("SpriteFrames_87u6k")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wv38o")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("2_7o6kw")
+health = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_gc661")
+debug_color = Color(0.627451, 0.521569, 0.266667, 0.541176)
+
+[node name="DamageTakenState" type="Node" parent="."]
+script = ExtResource("3_gscon")
+knockback_mult = 1000
+knockback_res = 6.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_gb6ie")
+}
+
+[node name="EnemyDeathParticles" parent="." instance=ExtResource("5_nwno1")]
+local_coords = true
+
+[connection signal="died" from="Hitbox" to="." method="_on_hitbox_died"]
+[connection signal="took_damage" from="Hitbox" to="DamageTakenState" method="got_hit"]

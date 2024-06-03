@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Last Stand - game jam"
-run/main_scene="res://Scene-Scenes/battle.tscn"
+run/main_scene="res://SceneScenes/battle.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
 

@@ -14,6 +14,9 @@ func _enter_state():
 	sword.position = p.position * 1.05
 	sword.connect("sword_ready_for_pickup", lunge_to_sword)
 	add_child(sword)
+	await get_tree().create_timer(1.5).timeout
+	if get_parent().curr_state == self:
+		final_slash()
 
 func lunge_to_sword(sword_pos):
 	var tween = create_tween()

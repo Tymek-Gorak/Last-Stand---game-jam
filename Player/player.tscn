@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cico272iebs5x"]
+[gd_scene load_steps=22 format=3 uid="uid://cico272iebs5x"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_kj5km"]
 [ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_lnvoh"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://Player/AttackState.gd" id="6_jau3v"]
 [ext_resource type="Script" path="res://Player/ParryState.gd" id="8_mgfsr"]
 [ext_resource type="Script" path="res://Player/DamageTakenState.gd" id="9_wnsr6"]
+[ext_resource type="Script" path="res://Player/PlayerDiedState.gd" id="11_3gf80"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wkvmc"]
 radius = 64.0
@@ -173,15 +174,19 @@ unique_name_in_owner = true
 one_shot = true
 autostart = true
 
+[node name="ParryState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("8_mgfsr")
+
 [node name="IFramesDamageTakenState" type="Node" parent="PlayerStateMachine"]
 unique_name_in_owner = true
 script = ExtResource("9_wnsr6")
 knockback_mult = 1000
 knockback_res = 4.5
 
-[node name="ParryState" type="Node" parent="PlayerStateMachine"]
+[node name="PlayerDiedState" type="Node" parent="PlayerStateMachine"]
 unique_name_in_owner = true
-script = ExtResource("8_mgfsr")
+script = ExtResource("11_3gf80")
 
 [node name="HammerHurtbox" type="Area2D" parent="."]
 unique_name_in_owner = true

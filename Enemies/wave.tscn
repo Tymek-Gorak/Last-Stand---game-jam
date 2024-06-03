@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://c1lqw1bhm6kvr"]
+
+[ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_05qfm"]
+[ext_resource type="Script" path="res://Enemies/wave.gd" id="1_ubg21"]
+[ext_resource type="Script" path="res://common/Hurtbox.gd" id="2_a1u51"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gwdud"]
+size = Vector2(128, 126)
+
+[node name="Wave" type="Node2D"]
+scale = Vector2(1.28, 23.68)
+script = ExtResource("1_ubg21")
+speed = 100.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.223529)
+position = Vector2(2, -2)
+texture = ExtResource("1_05qfm")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+position = Vector2(-3, -1.99991)
+monitoring = false
+script = ExtResource("2_a1u51")
+damage = 1
+knockback = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(5, 0)
+shape = SubResource("RectangleShape2D_gwdud")
+debug_color = Color(0.890196, 0.286275, 0.403922, 0.419608)

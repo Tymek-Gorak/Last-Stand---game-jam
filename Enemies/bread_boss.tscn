@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bnn0dti8ekdi4"]
+[gd_scene load_steps=22 format=3 uid="uid://bnn0dti8ekdi4"]
 
 [ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_h53fk"]
 [ext_resource type="Script" path="res://Enemies/BreadBoss.gd" id="1_l2dgg"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://duwiu5lgga3mv" path="res://Enemies/throwing_sword.tscn" id="8_7l5v5"]
 [ext_resource type="Script" path="res://Enemies/DazedState.gd" id="9_x0l7g"]
 [ext_resource type="Script" path="res://common/DamageTakenState.gd" id="11_abb51"]
+[ext_resource type="PackedScene" uid="uid://dqmhyn5wetdc" path="res://Enemies/enemy_death_particles.tscn" id="13_ya3r3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uiftm"]
 radius = 66.0
@@ -31,7 +32,59 @@ radius = 485.066
 radius = 44.0
 height = 160.0
 
+[sub_resource type="Animation" id="Animation_7kbi5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyDeathParticles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_t5qqu"]
+resource_name = "die"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyDeathParticles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3, 1.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"prep_for_death"
+}, {
+"args": [],
+"method": &"queue_free"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4f0lb"]
+_data = {
+"RESET": SubResource("Animation_7kbi5"),
+"die": SubResource("Animation_t5qqu")
+}
 
 [node name="BreadBoss" type="CharacterBody2D" groups=["BreadBoss"]]
 collision_layer = 2
@@ -45,6 +98,7 @@ modulate = Color(1, 0.215686, 0.054902, 1)
 texture = ExtResource("1_h53fk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
 shape = SubResource("CapsuleShape2D_uiftm")
 debug_color = Color(0, 0.6, 0.701961, 0.156863)
 
@@ -54,6 +108,7 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("5_sfvqo")
+health = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("RectangleShape2D_hnprp")
@@ -120,6 +175,7 @@ debug_color = Color(0.603922, 0.541176, 0, 0.0901961)
 
 [node name="LungeHurtbox" type="Area2D" parent="."]
 unique_name_in_owner = true
+scale = Vector2(1, 1.22559)
 collision_mask = 0
 monitoring = false
 monitorable = false
@@ -141,6 +197,8 @@ unique_name_in_owner = true
 libraries = {
 "": SubResource("AnimationLibrary_4f0lb")
 }
+
+[node name="EnemyDeathParticles" parent="." instance=ExtResource("13_ya3r3")]
 
 [connection signal="died" from="Hitbox" to="." method="died"]
 [connection signal="took_damage" from="Hitbox" to="." method="_on_hitbox_took_damage"]
