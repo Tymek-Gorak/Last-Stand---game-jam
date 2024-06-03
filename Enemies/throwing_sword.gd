@@ -7,9 +7,10 @@ signal sword_ready_for_pickup
 func _ready():
 	%Sword.position = to_local(bread_boss.position)
 	%Sword.look_at(to_global(Vector2.ZERO))
-	
+	%AnimationPlayer.play("AOE")
 	var tween = create_tween()
 	tween.tween_property(%Sword, "position", Vector2.ZERO, 0.3).set_ease(Tween.EASE_OUT)
+	tween.tween_interval(0.1)
 	tween.tween_property(%DamageZoneHurtbox, "monitorable", true, 0)
 	tween.tween_interval(0.2)
 	tween.tween_property(%DamageZoneHurtbox, "monitorable", false, 0)

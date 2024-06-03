@@ -1,21 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://c6q443gp4t55f"]
+[gd_scene load_steps=11 format=3 uid="uid://c6q443gp4t55f"]
 
 [ext_resource type="Script" path="res://Enemies/training_buddy.gd" id="1_3jo0g"]
-[ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_qgs14"]
 [ext_resource type="Script" path="res://common/Hitbox.gd" id="2_7o6kw"]
+[ext_resource type="Texture2D" uid="uid://ds2hmdebq28xe" path="res://sprites/LAST STAND.png" id="2_guypu"]
 [ext_resource type="Script" path="res://common/DamageTakenState.gd" id="3_gscon"]
 [ext_resource type="PackedScene" uid="uid://dqmhyn5wetdc" path="res://Enemies/enemy_death_particles.tscn" id="5_nwno1"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_87u6k"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("1_qgs14")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wv38o"]
 size = Vector2(120, 118)
@@ -83,9 +72,9 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_3jo0g")
 
-[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-sprite_frames = SubResource("SpriteFrames_87u6k")
+texture = ExtResource("2_guypu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_wv38o")

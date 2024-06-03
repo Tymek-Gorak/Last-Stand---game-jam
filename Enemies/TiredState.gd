@@ -6,6 +6,10 @@ class_name TiredState
 
 func _enter_state():
 	super._enter_state()
+	#if not %AnimationPlayer.current_animation == "attack":
+	%AnimationPlayer.play("Tired")
+	
+	
 	await get_tree().create_timer(a.attack_cooldown + randf_range(-a.attack_cooldown_range, a.attack_cooldown_range)).timeout
 	if %PlayerPointer.is_colliding():
 		var randomize_attack = randi_range(1,2)
@@ -21,14 +25,17 @@ func _process(delta):
 
 
 func slashy_slash():
+	%AnimationPlayer.play("SlashPrep")
 	await get_tree().create_timer(1).timeout
 	get_parent().slashes_left = randi_range(5, 8)
 	get_parent().change_state(%BreadBossSlashState)
 	
 func aoe_circle_attack():
-	await get_tree().create_timer(1).timeout
+	%AnimationPlayer.play("AOECirclePrep")
+	await get_tree().create_timer(0.8).timeout
 	get_parent().change_state(%AOECircleAttackState)
 
 func throw_sword():
-	await get_tree().create_timer(1).timeout
+	%AnimationPlayer.play("SwordThrowPrep")
+	await get_tree().create_timer(.5).timeout
 	get_parent().change_state(%SwordThrowState)

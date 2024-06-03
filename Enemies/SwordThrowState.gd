@@ -14,11 +14,13 @@ func _enter_state():
 	sword.position = p.position * 1.05
 	sword.connect("sword_ready_for_pickup", lunge_to_sword)
 	add_child(sword)
+	%AnimationPlayer.play("LungePrep")
 	await get_tree().create_timer(1.5).timeout
 	if get_parent().curr_state == self:
 		final_slash()
 
 func lunge_to_sword(sword_pos):
+	%AnimationPlayer.play("Lunge")
 	var tween = create_tween()
 	tween.tween_property(%LungeHurtbox, "monitorable", true, 0)
 	tween.tween_property(a, "position", sword_pos, .3).set_ease(Tween.EASE_OUT)

@@ -1,10 +1,17 @@
 extends State
 
+@export var weapon_sprite : Sprite2D
+
 func _enter_state():
 	super._enter_state()
 	%HammerHurtbox.look_at(a.get_global_mouse_position())
+	print(Vector2(a.get_global_mouse_position().rotated(PI)))
+	weapon_sprite.look_at(-a.get_global_mouse_position().rotated(PI))
+	%AnimationPlayer.play("attack")
+	print(%AnimationPlayer.current_animation)
 	a.velocity = Vector2.ZERO
 	a.velocity = a.velocity.direction_to(a.get_local_mouse_position())
+	
 	
 	var tween = create_tween()
 	tween.tween_property(%HammerHurtbox, "monitorable", true, 0)

@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Last Stand - game jam"
-run/main_scene="res://SceneScenes/battle.tscn"
+run/main_scene="res://SceneScenes/main_menu.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Manager="*res://common/MANAGER.gd"
 
 [debug]
 
@@ -29,7 +33,8 @@ folder_colors={
 "res://Enemies/": "teal",
 "res://Player/": "red",
 "res://common/": "gray",
-"res://sounds/": "yellow"
+"res://sounds/": "yellow",
+"res://sprites/": "pink"
 }
 
 [input]

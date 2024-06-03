@@ -9,13 +9,13 @@ var dummies_killed : int
 
 
 func _process(delta):
-	if dummies_killed == 4:
+	if dummies_killed == 2:
 		%AnimationPlayer.play("training waves")
 		set_process(false)
 
 func wave_left(speed := 50):
 	var wave =  load(wave_scene).instantiate()
-	wave.position = Vector2(234, 491)
+	wave.position = Vector2(0, 491)
 	wave.end_pos = Vector2(1945, 491)
 	wave.speed = speed
 	add_child(wave)
@@ -23,7 +23,7 @@ func wave_left(speed := 50):
 func wave_right(speed := 50):
 	var wave = load(wave_scene).instantiate()
 	wave.position = Vector2(1945, 491)
-	wave.end_pos = Vector2(234, 491)
+	wave.end_pos = Vector2(0, 491)
 	wave.speed = speed
 	add_child(wave)
 	

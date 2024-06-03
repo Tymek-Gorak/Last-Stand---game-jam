@@ -11,9 +11,11 @@ func got_hit(hurtbox, remaining_health):
 	tween.tween_property(%Hitbox, "monitoring", false, 0)
 	if remaining_health > 0:
 		for i in range(5):
-			tween.tween_property(%Sprite2D, "modulate", Color(1, 1, 1, .5), 0)
+			for sprite in sprites:
+				tween.tween_property(sprite, "modulate", Color(1, 1, 1, .5), 0)
 			tween.tween_interval(.11)
-			tween.tween_property(%Sprite2D, "modulate", Color.WHITE, 0)
+			for sprite in sprites:
+				tween.tween_property(sprite, "modulate", Color.WHITE, 0)
 			tween.tween_interval(.2)
 		tween.tween_property(%Hitbox, "monitoring", true, 0)
 	else:

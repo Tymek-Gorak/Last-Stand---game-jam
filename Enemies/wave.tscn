@@ -8,7 +8,7 @@
 size = Vector2(128, 126)
 
 [node name="Wave" type="Node2D"]
-scale = Vector2(1.28, 23.68)
+scale = Vector2(0.245874, 24.5128)
 script = ExtResource("1_ubg21")
 speed = 100.0
 

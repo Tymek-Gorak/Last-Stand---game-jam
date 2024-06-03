@@ -1,8 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://dpt0umggbj3se"]
+[gd_scene load_steps=13 format=3 uid="uid://dpt0umggbj3se"]
 
 [ext_resource type="Script" path="res://SceneScenes/flashback.gd" id="1_spiom"]
 [ext_resource type="PackedScene" uid="uid://cico272iebs5x" path="res://Player/player.tscn" id="2_henfy"]
 [ext_resource type="PackedScene" uid="uid://c6q443gp4t55f" path="res://Enemies/training_buddy.tscn" id="3_fohha"]
+[ext_resource type="Texture2D" uid="uid://cawiugcftp4b8" path="res://sprites/blachbackBG.png" id="4_ajrsb"]
+[ext_resource type="Texture2D" uid="uid://dealoexwi4k0c" path="res://sprites/player_new.png" id="4_cbwk7"]
+[ext_resource type="Texture2D" uid="uid://dhdnarm7jxarg" path="res://sprites/hammer_new.png" id="5_oo2xg"]
+[ext_resource type="PackedScene" uid="uid://coj0pce2t4d0s" path="res://SceneScenes/wall.tscn" id="5_t1i7e"]
 
 [sub_resource type="Animation" id="Animation_sp0h3"]
 length = 0.001
@@ -50,40 +54,40 @@ tracks/0/keys = {
 "args": [20],
 "method": &"wave_left"
 }, {
-"args": [40],
+"args": [20],
 "method": &"wave_up"
 }, {
-"args": [40],
+"args": [20],
 "method": &"wave_down"
 }, {
-"args": [40],
+"args": [20],
 "method": &"wave_right"
 }, {
-"args": [40],
+"args": [20],
 "method": &"wave_right"
 }, {
-"args": [40],
+"args": [20],
 "method": &"wave_down"
 }, {
-"args": [40],
+"args": [20],
 "method": &"wave_up"
 }, {
-"args": [40],
+"args": [19],
 "method": &"wave_down"
 }, {
-"args": [40],
+"args": [19],
 "method": &"wave_right"
 }, {
-"args": [40],
+"args": [19],
 "method": &"wave_up"
 }, {
-"args": [40],
+"args": [20],
 "method": &"wave_down"
 }, {
-"args": [40],
+"args": [20],
 "method": &"wave_left"
 }, {
-"args": [Vector2(1103, 463)],
+"args": [Vector2(631, 230)],
 "method": &"summon_training_dummy"
 }]
 }
@@ -94,6 +98,9 @@ _data = {
 "start_battle": SubResource("Animation_ykyrj"),
 "training waves": SubResource("Animation_fh4id")
 }
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_beku2"]
+radius = 117.017
 
 [node name="Flashback" type="Node2D"]
 script = ExtResource("1_spiom")
@@ -124,12 +131,12 @@ grow_vertical = 2
 color = Color(1, 1, 1, 0)
 
 [node name="Player" parent="." instance=ExtResource("2_henfy")]
-position = Vector2(1103, 463)
+position = Vector2(631, 230)
+sprite_armor = ExtResource("4_cbwk7")
+sprite_hammer = ExtResource("5_oo2xg")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(1152, 648)
-scale = Vector2(1.15191, 0.64581)
-zoom = Vector2(0.5, 0.5)
+position = Vector2(576, 324)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true
@@ -139,19 +146,130 @@ libraries = {
 autoplay = "start_battle"
 
 [node name="TrainingBuddies" type="Node2D" parent="."]
+position = Vector2(-402, -119)
 
 [node name="TrainingBuddy" parent="TrainingBuddies" instance=ExtResource("3_fohha")]
-position = Vector2(1576, 250)
+position = Vector2(1357, 352)
 metadata/_edit_group_ = true
 
 [node name="TrainingBuddy2" parent="TrainingBuddies" instance=ExtResource("3_fohha")]
-position = Vector2(1629, 692)
+position = Vector2(708, 356)
 metadata/_edit_group_ = true
 
-[node name="TrainingBuddy3" parent="TrainingBuddies" instance=ExtResource("3_fohha")]
-position = Vector2(650, 667)
-metadata/_edit_group_ = true
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+layer = -128
 
-[node name="TrainingBuddy4" parent="TrainingBuddies" instance=ExtResource("3_fohha")]
-position = Vector2(633, 259)
-metadata/_edit_group_ = true
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer2"]
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("4_ajrsb")
+
+[node name="wall" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(16, 247)
+scale = Vector2(1.32817, 41.0506)
+
+[node name="wall2" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(1123, 284)
+scale = Vector2(1.32817, 41.0506)
+
+[node name="wall3" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(594, 546)
+rotation = 1.5708
+scale = Vector2(14.5966, 69.5206)
+
+[node name="wall4" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(581, -87)
+rotation = 1.5708
+scale = Vector2(12.7385, 56.4729)
+
+[node name="wall5" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(1538, 65)
+rotation = 1.5708
+scale = Vector2(1.2366, 69.5206)
+
+[node name="wall6" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(1627, 104)
+rotation = 1.5708
+scale = Vector2(1.2366, 69.5206)
+
+[node name="wall7" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(-395, 98)
+rotation = 1.5708
+scale = Vector2(1.2366, 69.5206)
+
+[node name="wall8" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(-287, 73)
+rotation = 1.5708
+scale = Vector2(1.2366, 69.5206)
+
+[node name="wall9" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(-610, 302)
+rotation = 1.5708
+scale = Vector2(1.2366, 69.5206)
+
+[node name="wall10" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(-571, 357)
+rotation = 1.5708
+scale = Vector2(1.2366, 69.5206)
+
+[node name="wall11" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(-571, 357)
+rotation = 1.5708
+scale = Vector2(1.2366, 69.5206)
+
+[node name="wall12" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(1740, 384)
+rotation = 1.5708
+scale = Vector2(1.2366, 69.5206)
+
+[node name="wall13" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(-534, 397)
+rotation = 1.5708
+scale = Vector2(1.2366, 69.5206)
+
+[node name="wall14" parent="." instance=ExtResource("5_t1i7e")]
+position = Vector2(-534, 397)
+rotation = 1.5708
+scale = Vector2(1.60773, 65.8549)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("CircleShape2D_beku2")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+position = Vector2(309, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+shape = SubResource("CircleShape2D_beku2")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="."]
+position = Vector2(374, -45)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
+shape = SubResource("CircleShape2D_beku2")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="."]
+position = Vector2(896, -35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4"]
+shape = SubResource("CircleShape2D_beku2")
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="."]
+position = Vector2(977, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D5"]
+shape = SubResource("CircleShape2D_beku2")
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="."]
+position = Vector2(1086, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D6"]
+shape = SubResource("CircleShape2D_beku2")
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="."]
+position = Vector2(161, 9)
+scale = Vector2(1, 0.996146)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D7"]
+shape = SubResource("CircleShape2D_beku2")

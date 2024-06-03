@@ -1,6 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://c60sk31yqhb38"]
+[gd_scene load_steps=10 format=3 uid="uid://c60sk31yqhb38"]
 
 [ext_resource type="FontFile" uid="uid://cphiu4m4816af" path="res://common/pixel-font.ttf" id="1_etp3s"]
+[ext_resource type="Texture2D" uid="uid://bam2vlykibqoy" path="res://sprites/BGBGBADDd.png" id="1_s6b3a"]
+[ext_resource type="Texture2D" uid="uid://d068j0enuyi27" path="res://sprites/BGBGd.png" id="2_0vdjm"]
 [ext_resource type="PackedScene" uid="uid://dn78tplcqg4t1" path="res://SceneScenes/battle.tscn" id="2_03u28"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pcclu"]
@@ -55,10 +57,22 @@ tracks/2/keys = {
 "update": 0,
 "values": [Vector2(576, 324)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BGGood:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_ajpj6"]
 resource_name = "start_game"
-length = 4.5
+length = 7.5
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -66,7 +80,7 @@ tracks/0/path = NodePath("StartButton")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(4.5),
+"times": PackedFloat32Array(7.5),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -80,7 +94,7 @@ tracks/1/path = NodePath("ColorRect:color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.2, 2, 4),
+"times": PackedFloat32Array(0.2, 2, 7),
 "transitions": PackedFloat32Array(1.56917, 1e+06, 1.56917),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -92,7 +106,7 @@ tracks/2/path = NodePath("Camera2D:zoom")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(1.4, 3.5),
+"times": PackedFloat32Array(4.4, 6.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(3.387, 3.387)]
@@ -104,10 +118,22 @@ tracks/3/path = NodePath("Camera2D:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(1.4, 3.5),
+"times": PackedFloat32Array(4.4, 6.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(576, 324), Vector2(690, 417)]
+"values": [Vector2(576, 324), Vector2(737, 511)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BGGood:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_njm4p"]
@@ -123,6 +149,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="BGBad" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("1_s6b3a")
+
+[node name="BGGood" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("2_0vdjm")
 
 [node name="StartButton" type="Button" parent="."]
 texture_filter = 1
@@ -160,6 +198,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -333.0
+offset_top = -276.0
+offset_right = 9.0
+offset_bottom = 19.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
