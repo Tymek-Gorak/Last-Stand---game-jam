@@ -28,7 +28,8 @@ enabled=PackedStringArray("res://addons/anthonyec.camera_preview/plugin.cfg")
 folder_colors={
 "res://Enemies/": "teal",
 "res://Player/": "red",
-"res://common/": "gray"
+"res://common/": "gray",
+"res://sounds/": "yellow"
 }
 
 [input]

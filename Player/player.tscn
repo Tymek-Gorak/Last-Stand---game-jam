@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cico272iebs5x"]
+[gd_scene load_steps=21 format=3 uid="uid://cico272iebs5x"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_kj5km"]
 [ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_lnvoh"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://Player/RollState.gd" id="5_pperi"]
 [ext_resource type="Script" path="res://Player/AttackState.gd" id="6_jau3v"]
 [ext_resource type="Script" path="res://Player/ParryState.gd" id="8_mgfsr"]
+[ext_resource type="Script" path="res://Player/DamageTakenState.gd" id="9_wnsr6"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wkvmc"]
 radius = 64.0
@@ -69,14 +70,63 @@ tracks/0/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_mbedr"]
+resource_name = "attack"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(119, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_jea1f"]
+resource_name = "get_hit"
+length = 0.25
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerStateMachine/IFramesDamageTakenState")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"walk_again"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_t8i2h"]
 _data = {
 "Parry": SubResource("Animation_afawf"),
-"RESET": SubResource("Animation_xh77j")
+"RESET": SubResource("Animation_xh77j"),
+"attack": SubResource("Animation_mbedr"),
+"get_hit": SubResource("Animation_jea1f")
 }
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
+z_index = 1
 collision_mask = 4
 script = ExtResource("1_kj5km")
 
@@ -92,6 +142,7 @@ unique_name_in_owner = true
 collision_layer = 0
 monitorable = false
 script = ExtResource("3_0dtj3")
+health = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("CapsuleShape2D_vyshr")
@@ -109,12 +160,6 @@ script = ExtResource("5_nv4d7")
 unique_name_in_owner = true
 script = ExtResource("3_1v227")
 
-[node name="AttackCooldownTimer" type="Timer" parent="PlayerStateMachine/WalkState"]
-unique_name_in_owner = true
-wait_time = 0.8
-one_shot = true
-autostart = true
-
 [node name="RollState" type="Node" parent="PlayerStateMachine"]
 unique_name_in_owner = true
 script = ExtResource("5_pperi")
@@ -123,11 +168,20 @@ script = ExtResource("5_pperi")
 unique_name_in_owner = true
 script = ExtResource("6_jau3v")
 
+[node name="AttackCooldownTimer" type="Timer" parent="PlayerStateMachine/AttackState"]
+unique_name_in_owner = true
+one_shot = true
+autostart = true
+
+[node name="IFramesDamageTakenState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("9_wnsr6")
+knockback_mult = 1000
+knockback_res = 4.5
+
 [node name="ParryState" type="Node" parent="PlayerStateMachine"]
 unique_name_in_owner = true
 script = ExtResource("8_mgfsr")
-
-[node name="DamageTakenState" type="Node" parent="PlayerStateMachine"]
 
 [node name="HammerHurtbox" type="Area2D" parent="."]
 unique_name_in_owner = true
@@ -137,6 +191,7 @@ monitoring = false
 monitorable = false
 script = ExtResource("3_41d84")
 damage = 1
+knockback = 1.3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HammerHurtbox"]
 position = Vector2(176, 0)
@@ -163,5 +218,7 @@ unique_name_in_owner = true
 libraries = {
 "": SubResource("AnimationLibrary_t8i2h")
 }
-playback_default_blend_time = 1.0
 blend_times = [&"RESET", &"Parry", 0.5]
+
+[connection signal="died" from="Hitbox" to="." method="_on_hitbox_died"]
+[connection signal="took_damage" from="Hitbox" to="PlayerStateMachine/IFramesDamageTakenState" method="got_hit"]

@@ -26,6 +26,7 @@ texture = ExtResource("1_uh1xv")
 collision_mask = 0
 script = ExtResource("3_v4516")
 damage = 7
+knockback = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sword/Hurtbox"]
 rotation = 1.57079
@@ -39,6 +40,7 @@ monitoring = false
 monitorable = false
 script = ExtResource("3_v4516")
 damage = 5
+knockback = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DamageZoneHurtbox"]
 shape = SubResource("CircleShape2D_dsnb3")

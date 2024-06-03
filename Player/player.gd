@@ -1,6 +1,7 @@
 extends CharacterBody2D
 class_name Player
 
+signal died
 
 @export var MAX_SPEED := 600
 
@@ -10,3 +11,10 @@ class_name Player
 @export var roll_speed := 2000
 
 
+
+
+func _on_hitbox_died():
+	died.emit()
+	
+	
+	

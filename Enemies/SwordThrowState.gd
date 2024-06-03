@@ -11,7 +11,7 @@ class_name SwordThrowState
 func _enter_state():
 	super._enter_state()
 	var sword = throwing_sword.instantiate() as Node2D
-	sword.position = p.position
+	sword.position = p.position * 1.05
 	sword.connect("sword_ready_for_pickup", lunge_to_sword)
 	add_child(sword)
 

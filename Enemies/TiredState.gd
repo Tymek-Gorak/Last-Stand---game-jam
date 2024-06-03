@@ -6,7 +6,7 @@ class_name TiredState
 
 func _enter_state():
 	super._enter_state()
-	await get_tree().create_timer(.5).timeout
+	await get_tree().create_timer(a.attack_cooldown + randf_range(-a.attack_cooldown_range, a.attack_cooldown_range)).timeout
 	if %PlayerPointer.is_colliding():
 		var randomize_attack = randi_range(1,2)
 		if randomize_attack == 1:
