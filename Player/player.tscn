@@ -1,0 +1,381 @@
+[gd_scene load_steps=28 format=3 uid="uid://cico272iebs5x"]
+
+[ext_resource type="Script" path="res://Player/player.gd" id="1_kj5km"]
+[ext_resource type="Texture2D" uid="uid://bjtlq3o4v7b6h" path="res://sprites/player_old.png" id="2_i5vms"]
+[ext_resource type="Script" path="res://common/Hitbox.gd" id="3_0dtj3"]
+[ext_resource type="Script" path="res://Player/WalkState.gd" id="3_1v227"]
+[ext_resource type="Script" path="res://common/Hurtbox.gd" id="3_41d84"]
+[ext_resource type="Texture2D" uid="uid://b3ry778srg0xw" path="res://sprites/hammer_old.png" id="3_c1vig"]
+[ext_resource type="Script" path="res://Player/PlayerStateMachine.gd" id="3_qynhh"]
+[ext_resource type="Script" path="res://Player/IdleState.gd" id="5_nv4d7"]
+[ext_resource type="Script" path="res://Player/RollState.gd" id="5_pperi"]
+[ext_resource type="Script" path="res://Player/AttackState.gd" id="6_jau3v"]
+[ext_resource type="Script" path="res://Player/ParryState.gd" id="8_mgfsr"]
+[ext_resource type="Script" path="res://Player/DamageTakenState.gd" id="9_wnsr6"]
+[ext_resource type="Script" path="res://Player/PlayerDiedState.gd" id="11_3gf80"]
+
+[sub_resource type="GDScript" id="GDScript_8dxlx"]
+script/source = "extends RayCast2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	rotation = $\"../WeaponSprite\".rotation
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wkvmc"]
+radius = 27.0
+height = 54.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vyshr"]
+radius = 20.0
+height = 40.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k1uiq"]
+size = Vector2(153, 142)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lfs65"]
+size = Vector2(47, 194)
+
+[sub_resource type="Animation" id="Animation_afawf"]
+resource_name = "Parry"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ParryArea:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerStateMachine/ParryState")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"start_walking"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_xh77j"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ParryArea:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PlayerSprite/WeaponSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_mbedr"]
+resource_name = "attack"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [12, 13, 14, 15]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerSprite/WeaponSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [12, 13, 14, 15]
+}
+
+[sub_resource type="Animation" id="Animation_jea1f"]
+resource_name = "get_hit"
+length = 0.25
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerStateMachine/IFramesDamageTakenState")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"walk_again"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_glqnf"]
+resource_name = "Walk"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [4, 5, 6, 7]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerSprite/WeaponSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [3, 4, 5, 6, 7]
+}
+
+[sub_resource type="Animation" id="Animation_jlo8m"]
+resource_name = "Roll"
+length = 0.45
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite/WeaponSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [8, 9, 10, 11]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [8, 9, 10, 11]
+}
+
+[sub_resource type="Animation" id="Animation_xvrlc"]
+resource_name = "Attack"
+
+[sub_resource type="Animation" id="Animation_gqpqh"]
+resource_name = "Idle"
+length = 0.1
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerSprite/WeaponSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_t8i2h"]
+_data = {
+"Attack": SubResource("Animation_xvrlc"),
+"Idle": SubResource("Animation_gqpqh"),
+"Parry": SubResource("Animation_afawf"),
+"RESET": SubResource("Animation_xh77j"),
+"Roll": SubResource("Animation_jlo8m"),
+"Walk": SubResource("Animation_glqnf"),
+"attack": SubResource("Animation_mbedr"),
+"get_hit": SubResource("Animation_jea1f")
+}
+
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
+z_index = 1
+collision_mask = 4
+script = ExtResource("1_kj5km")
+sprite_armor = ExtResource("2_i5vms")
+sprite_hammer = ExtResource("3_c1vig")
+
+[node name="PlayerSprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+texture = ExtResource("2_i5vms")
+flip_h = true
+hframes = 16
+
+[node name="WeaponSprite" type="Sprite2D" parent="PlayerSprite"]
+texture = ExtResource("3_c1vig")
+offset = Vector2(32.195, 0)
+flip_h = true
+hframes = 16
+
+[node name="RayCast2D" type="RayCast2D" parent="PlayerSprite"]
+target_position = Vector2(967, -9)
+script = SubResource("GDScript_8dxlx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_wkvmc")
+
+[node name="Hitbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+monitorable = false
+script = ExtResource("3_0dtj3")
+health = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CapsuleShape2D_vyshr")
+debug_color = Color(0.345098, 0.619608, 0, 0.419608)
+
+[node name="PlayerStateMachine" type="Node" parent="." node_paths=PackedStringArray("curr_state")]
+script = ExtResource("3_qynhh")
+curr_state = NodePath("IdleState")
+
+[node name="IdleState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("5_nv4d7")
+
+[node name="WalkState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("sprite")]
+unique_name_in_owner = true
+script = ExtResource("3_1v227")
+sprite = NodePath("../../PlayerSprite")
+
+[node name="RollState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("sprites", "sprite")]
+unique_name_in_owner = true
+script = ExtResource("5_pperi")
+sprites = [NodePath("../../PlayerSprite"), NodePath("../../PlayerSprite/WeaponSprite")]
+sprite = NodePath("../../PlayerSprite")
+
+[node name="AttackState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("weapon_sprite")]
+unique_name_in_owner = true
+script = ExtResource("6_jau3v")
+weapon_sprite = NodePath("../../PlayerSprite/WeaponSprite")
+
+[node name="AttackCooldownTimer" type="Timer" parent="PlayerStateMachine/AttackState"]
+unique_name_in_owner = true
+one_shot = true
+autostart = true
+
+[node name="ParryState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("8_mgfsr")
+
+[node name="IFramesDamageTakenState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("sprites")]
+unique_name_in_owner = true
+script = ExtResource("9_wnsr6")
+knockback_mult = 1000
+knockback_res = 4.5
+sprites = [NodePath("../../PlayerSprite"), NodePath("../../PlayerSprite/WeaponSprite")]
+
+[node name="PlayerDiedState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("11_3gf80")
+
+[node name="HammerHurtbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("3_41d84")
+damage = 1
+knockback = 1.3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HammerHurtbox"]
+position = Vector2(83.5, -1)
+shape = SubResource("RectangleShape2D_k1uiq")
+debug_color = Color(1, 0, 0.145098, 0.419608)
+
+[node name="ParryArea" type="Area2D" parent="."]
+unique_name_in_owner = true
+visible = false
+position = Vector2(3, 0)
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+monitorable = false
+priority = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParryArea"]
+position = Vector2(77.5, 0)
+shape = SubResource("RectangleShape2D_lfs65")
+debug_color = Color(0.717647, 0.568627, 0.2, 0.490196)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_t8i2h")
+}
+blend_times = [&"RESET", &"Parry", 0.5]
+
+[connection signal="died" from="Hitbox" to="." method="_on_hitbox_died"]
+[connection signal="took_damage" from="Hitbox" to="PlayerStateMachine/IFramesDamageTakenState" method="got_hit"]

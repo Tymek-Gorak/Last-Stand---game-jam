@@ -1,0 +1,159 @@
+[gd_scene load_steps=8 format=3 uid="uid://bv6vfjos0wtqr"]
+
+[ext_resource type="Texture2D" uid="uid://bxgigorcix8e" path="res://sprites/truimpgh.png" id="1_2td55"]
+[ext_resource type="FontFile" uid="uid://cphiu4m4816af" path="res://common/pixel-font.ttf" id="2_vflxk"]
+
+[sub_resource type="Animation" id="Animation_sp0h3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/Control/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ykyrj"]
+resource_name = "start_battle"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/Control/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1.62451, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_fh4id"]
+resource_name = "training waves"
+length = 20.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2, 3, 5.8, 7.5, 8.6, 10, 11.6, 13.1, 14.8, 14.9, 17, 17.1, 19.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"values": [{
+"args": [20],
+"method": &"wave_left"
+}, {
+"args": [40],
+"method": &"wave_up"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_right"
+}, {
+"args": [40],
+"method": &"wave_right"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_up"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_right"
+}, {
+"args": [40],
+"method": &"wave_up"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_left"
+}, {
+"args": [Vector2(1103, 463)],
+"method": &"summon_training_dummy"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ofjux"]
+_data = {
+"RESET": SubResource("Animation_sp0h3"),
+"start_battle": SubResource("Animation_ykyrj"),
+"training waves": SubResource("Animation_fh4id")
+}
+
+[sub_resource type="Theme" id="Theme_p18dh"]
+default_font = ExtResource("2_vflxk")
+default_font_size = 26
+
+[node name="EndingScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchor_right = 2.0
+anchor_bottom = 1.998
+offset_right = -1152.0
+offset_bottom = -646.704
+metadata/_edit_use_anchors_ = true
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+metadata/_edit_use_anchors_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_ofjux")
+}
+autoplay = "start_battle"
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_2td55")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -395.0
+offset_top = -150.0
+offset_right = 516.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = SubResource("Theme_p18dh")
+theme_override_colors/default_color = Color(0.54902, 0.54902, 0.54902, 1)
+text = "YOU ARE STILL ALIVE... BUT FOR HOW LONG?"
+scroll_active = false

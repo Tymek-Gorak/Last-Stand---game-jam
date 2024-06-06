@@ -1,0 +1,118 @@
+[gd_scene load_steps=11 format=3 uid="uid://duwiu5lgga3mv"]
+
+[ext_resource type="Script" path="res://Enemies/throwing_sword.gd" id="1_kbyt6"]
+[ext_resource type="Texture2D" uid="uid://dujvyfn7vsov2" path="res://sprites/Arror_of_Sword.png" id="3_uensj"]
+[ext_resource type="Script" path="res://common/Hurtbox.gd" id="3_v4516"]
+[ext_resource type="Texture2D" uid="uid://ck1qknwk3hpcx" path="res://sprites/The_circel.png" id="4_piw4m"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dsnb3"]
+radius = 141.057
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_t4xjj"]
+height = 62.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p0pjt"]
+radius = 10.0
+height = 96.0001
+
+[sub_resource type="Animation" id="Animation_qe3a6"]
+resource_name = "AOE"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 4, 5, 7, 8]
+}
+
+[sub_resource type="Animation" id="Animation_4bkim"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6tvcn"]
+_data = {
+"AOE": SubResource("Animation_qe3a6"),
+"RESET": SubResource("Animation_4bkim")
+}
+
+[node name="ThrowingSword" type="Node2D"]
+scale = Vector2(0.777658, 0.777658)
+script = ExtResource("1_kbyt6")
+
+[node name="DamageZoneHurtbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("3_v4516")
+damage = 1
+knockback = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageZoneHurtbox"]
+shape = SubResource("CircleShape2D_dsnb3")
+debug_color = Color(0.690196, 0.498039, 0.105882, 0.282353)
+
+[node name="PickupRange" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupRange"]
+position = Vector2(0, -15)
+shape = SubResource("CapsuleShape2D_t4xjj")
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(47, 7)
+rotation = -0.123064
+
+[node name="Sword" type="Sprite2D" parent="Node2D"]
+unique_name_in_owner = true
+texture = ExtResource("3_uensj")
+hframes = 29
+frame = 22
+
+[node name="Hurtbox" type="Area2D" parent="Node2D"]
+position = Vector2(-45.7853, -12.7165)
+rotation = 0.123064
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("3_v4516")
+damage = 1
+knockback = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Hurtbox"]
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_p0pjt")
+debug_color = Color(0.921569, 0.192157, 0.521569, 0.419608)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_6tvcn")
+}
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(21, -3)
+texture = ExtResource("4_piw4m")
+hframes = 9
+
+[connection signal="body_entered" from="PickupRange" to="." method="_on_pickup_range_body_entered"]

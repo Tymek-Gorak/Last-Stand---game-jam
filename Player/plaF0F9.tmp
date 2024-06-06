@@ -1,0 +1,129 @@
+[gd_scene load_steps=15 format=3 uid="uid://cico272iebs5x"]
+
+[ext_resource type="Script" path="res://Player/player.gd" id="1_kj5km"]
+[ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_lnvoh"]
+[ext_resource type="Script" path="res://Player/WalkState.gd" id="3_1v227"]
+[ext_resource type="Script" path="res://common/Hurtbox.gd" id="3_41d84"]
+[ext_resource type="Script" path="res://Player/PlayerStateMachine.gd" id="3_qynhh"]
+[ext_resource type="Script" path="res://Player/RollState.gd" id="5_pperi"]
+[ext_resource type="Script" path="res://Player/AttackState.gd" id="6_jau3v"]
+[ext_resource type="Script" path="res://Player/ParryState.gd" id="8_mgfsr"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wkvmc"]
+radius = 64.0
+height = 128.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k1uiq"]
+size = Vector2(176, 187)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lfs65"]
+size = Vector2(47, 194)
+
+[sub_resource type="Animation" id="Animation_afawf"]
+resource_name = "Parry"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ParryArea:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_xh77j"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ParryArea:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_t8i2h"]
+_data = {
+"Parry": SubResource("Animation_afawf"),
+"RESET": SubResource("Animation_xh77j")
+}
+
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
+collision_mask = 4
+script = ExtResource("1_kj5km")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+texture = ExtResource("1_lnvoh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_wkvmc")
+
+[node name="HammerHurtbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+monitorable = false
+script = ExtResource("3_41d84")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HammerHurtbox"]
+position = Vector2(176, 0)
+shape = SubResource("RectangleShape2D_k1uiq")
+debug_color = Color(1, 0, 0.145098, 0.419608)
+
+[node name="PlayerStateMachine" type="Node" parent="." node_paths=PackedStringArray("curr_state")]
+script = ExtResource("3_qynhh")
+curr_state = NodePath("WalkState")
+
+[node name="WalkState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("3_1v227")
+
+[node name="AttackCooldownTimer" type="Timer" parent="PlayerStateMachine/WalkState"]
+unique_name_in_owner = true
+wait_time = 0.8
+one_shot = true
+autostart = true
+
+[node name="RollState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("5_pperi")
+
+[node name="AttackState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("6_jau3v")
+
+[node name="ParryState" type="Node" parent="PlayerStateMachine"]
+unique_name_in_owner = true
+script = ExtResource("8_mgfsr")
+
+[node name="ParryArea" type="Area2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(3, 0)
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+monitorable = false
+priority = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParryArea"]
+position = Vector2(77.5, 0)
+shape = SubResource("RectangleShape2D_lfs65")
+debug_color = Color(0.717647, 0.568627, 0.2, 0.490196)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_t8i2h")
+}
+playback_default_blend_time = 1.0
+blend_times = [&"Parry", &"RESET", 0.5, &"RESET", &"Parry", 0.5]
