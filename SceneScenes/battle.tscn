@@ -1,0 +1,261 @@
+[gd_scene load_steps=14 format=3 uid="uid://dn78tplcqg4t1"]
+
+[ext_resource type="PackedScene" uid="uid://cico272iebs5x" path="res://Player/player.tscn" id="1_dl5od"]
+[ext_resource type="Script" path="res://SceneScenes/battle_scene.gd" id="1_jfwuq"]
+[ext_resource type="PackedScene" uid="uid://bnn0dti8ekdi4" path="res://Enemies/bread_boss.tscn" id="2_yrrkd"]
+[ext_resource type="PackedScene" uid="uid://dobcaeotnlg6a" path="res://Enemies/bread_boss_health_bar.tscn" id="3_1nyys"]
+[ext_resource type="Texture2D" uid="uid://cam0h3bm6276j" path="res://sprites/battleBG.png" id="5_e8d1r"]
+[ext_resource type="PackedScene" uid="uid://coj0pce2t4d0s" path="res://SceneScenes/wall.tscn" id="6_c0if7"]
+
+[sub_resource type="GDScript" id="GDScript_je2mp"]
+script/source = "extends Camera2D
+
+
+"
+
+[sub_resource type="GDScript" id="GDScript_63x34"]
+script/source = "extends ProgressBar
+
+
+func _on_bread_boss_took_damage(hurtbox, remaining_health):
+	value = remaining_health
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_okigo"]
+radius = 117.017
+
+[sub_resource type="Animation" id="Animation_sp0h3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/Control/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ykyrj"]
+resource_name = "start_battle"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/Control/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1.62451, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_fh4id"]
+resource_name = "training waves"
+length = 20.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.2, 3, 5.8, 7.5, 8.6, 10, 11.6, 13.1, 14.8, 14.9, 17, 17.1, 19.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"values": [{
+"args": [20],
+"method": &"wave_left"
+}, {
+"args": [40],
+"method": &"wave_up"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_right"
+}, {
+"args": [40],
+"method": &"wave_right"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_up"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_right"
+}, {
+"args": [40],
+"method": &"wave_up"
+}, {
+"args": [40],
+"method": &"wave_down"
+}, {
+"args": [40],
+"method": &"wave_left"
+}, {
+"args": [Vector2(1103, 463)],
+"method": &"summon_training_dummy"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ofjux"]
+_data = {
+"RESET": SubResource("Animation_sp0h3"),
+"start_battle": SubResource("Animation_ykyrj"),
+"training waves": SubResource("Animation_fh4id")
+}
+
+[node name="Battle" type="Node2D"]
+script = ExtResource("1_jfwuq")
+
+[node name="Player" parent="." instance=ExtResource("1_dl5od")]
+position = Vector2(814, 334)
+scale = Vector2(0.874459, 0.924488)
+
+[node name="BreadBoss" parent="." instance=ExtResource("2_yrrkd")]
+position = Vector2(260, 321)
+scale = Vector2(0.786546, 0.828698)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 324)
+scale = Vector2(1.15191, 0.64581)
+script = SubResource("GDScript_je2mp")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchor_right = 2.0
+anchor_bottom = 1.998
+offset_right = -1152.0
+offset_bottom = -646.704
+metadata/_edit_use_anchors_ = true
+
+[node name="BreadBossHealthBar" parent="CanvasLayer/Control" instance=ExtResource("3_1nyys")]
+layout_mode = 1
+offset_left = -468.0
+offset_top = -58.0
+offset_right = 468.0
+offset_bottom = -10.0
+max_value = 16.0
+value = 15.8
+script = SubResource("GDScript_63x34")
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="CanvasLayer/Control/BreadBossHealthBar"]
+position = Vector2(1120, 9)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/Control/BreadBossHealthBar/StaticBody2D7"]
+shape = SubResource("CircleShape2D_okigo")
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="CanvasLayer/Control/BreadBossHealthBar"]
+position = Vector2(1052, -81)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/Control/BreadBossHealthBar/StaticBody2D8"]
+shape = SubResource("CircleShape2D_okigo")
+
+[node name="StaticBody2D9" type="StaticBody2D" parent="CanvasLayer/Control/BreadBossHealthBar"]
+position = Vector2(996, -167)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/Control/BreadBossHealthBar/StaticBody2D9"]
+shape = SubResource("CircleShape2D_okigo")
+
+[node name="StaticBody2D10" type="StaticBody2D" parent="CanvasLayer/Control/BreadBossHealthBar"]
+position = Vector2(953, -296)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/Control/BreadBossHealthBar/StaticBody2D10"]
+shape = SubResource("CircleShape2D_okigo")
+
+[node name="StaticBody2D11" type="StaticBody2D" parent="CanvasLayer/Control/BreadBossHealthBar"]
+position = Vector2(923, -420)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/Control/BreadBossHealthBar/StaticBody2D11"]
+shape = SubResource("CircleShape2D_okigo")
+
+[node name="StaticBody2D12" type="StaticBody2D" parent="CanvasLayer/Control/BreadBossHealthBar"]
+position = Vector2(910, -545)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/Control/BreadBossHealthBar/StaticBody2D12"]
+shape = SubResource("CircleShape2D_okigo")
+
+[node name="StaticBody2D13" type="StaticBody2D" parent="CanvasLayer/Control/BreadBossHealthBar"]
+position = Vector2(910, -545)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CanvasLayer/Control/BreadBossHealthBar/StaticBody2D13"]
+shape = SubResource("CircleShape2D_okigo")
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
+metadata/_edit_use_anchors_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+"": SubResource("AnimationLibrary_ofjux")
+}
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+layer = -2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer2"]
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("5_e8d1r")
+
+[node name="wall" parent="." instance=ExtResource("6_c0if7")]
+position = Vector2(-249, 46)
+scale = Vector2(24.36, 68.36)
+
+[node name="wall2" parent="." instance=ExtResource("6_c0if7")]
+position = Vector2(1157, 259)
+scale = Vector2(1, 68.36)
+
+[node name="wall3" parent="." instance=ExtResource("6_c0if7")]
+position = Vector2(539, -303)
+rotation = 1.5708
+scale = Vector2(30.76, 68.36)
+
+[node name="wall4" parent="." instance=ExtResource("6_c0if7")]
+position = Vector2(531, 970)
+rotation = 1.5708
+scale = Vector2(30.76, 68.36)
+
+[node name="wall5" parent="." instance=ExtResource("6_c0if7")]
+position = Vector2(1631, -125)
+rotation = 1.5708
+scale = Vector2(30.76, 68.36)
+
+[node name="wall6" parent="." instance=ExtResource("6_c0if7")]
+position = Vector2(1671, 34)
+rotation = 1.5708
+scale = Vector2(30.76, 68.36)
+
+[node name="wall7" parent="." instance=ExtResource("6_c0if7")]
+position = Vector2(1726, 187)
+rotation = 1.5708
+scale = Vector2(30.76, 68.36)
+
+[node name="wall8" parent="." instance=ExtResource("6_c0if7")]
+position = Vector2(1807, 314)
+rotation = 1.5708
+scale = Vector2(30.76, 68.36)
+
+[connection signal="died" from="Player" to="Camera2D" method="_on_player_died"]
+[connection signal="took_damage" from="BreadBoss" to="CanvasLayer/Control/BreadBossHealthBar" method="_on_bread_boss_took_damage"]

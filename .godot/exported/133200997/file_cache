@@ -1,0 +1,13 @@
+res://addons/anthonyec.camera_preview/preview.tscn::5bda523664ec4679a7409130bb0c60ca::1716733253::res://.godot/exported/133200997/export-3b88bc956636ac73548e66524dcf9741-preview.scn
+res://Enemies/bread_boss.tscn::51df54e26fc1400b0cb5d4613a9a4ebd::1717447594::res://.godot/exported/133200997/export-c7b03a06f16f124cc596cbb9a52f9f33-bread_boss.scn
+res://Enemies/bread_boss_health_bar.tscn::3e0c76480868823e7ab84ea1b15d7b3a::1717415253::res://.godot/exported/133200997/export-a53cba56e1435d495d0e85379ac1373f-bread_boss_health_bar.scn
+res://Enemies/enemy_death_particles.tscn::47aa6c938f5c4403763cf437885d1b51::1717447594::res://.godot/exported/133200997/export-ed97e306adb2de18b62fa23814a4338f-enemy_death_particles.scn
+res://Enemies/throwing_sword.tscn::4e0b1ecf25272a3a8c7f0331f36738d9::1717447594::res://.godot/exported/133200997/export-b7efb9cf80d2996a28f58d0299034cea-throwing_sword.scn
+res://Enemies/training_buddy.tscn::f651d19c51cbf8cce52eb551f0f8f8cd::1717447594::res://.godot/exported/133200997/export-396fc13df5912d445b6016f3a471dd9d-training_buddy.scn
+res://Enemies/wave.tscn::307c9697dd3cbea6a68ea51b459414ac::1717447594::res://.godot/exported/133200997/export-92d9ca112cfe4bf88f54ef7148e9d199-wave.scn
+res://Player/player.tscn::8d087df1296be4d49b49d7f5158b6398::1717447594::res://.godot/exported/133200997/export-d267b47f7e81a3258979164d56d0d9c2-player.scn
+res://SceneScenes/battle.tscn::a7f339dffa278bf67849034330af5110::1717447594::res://.godot/exported/133200997/export-5706f86c5302475a45c1b59cdb8e2398-battle.scn
+res://SceneScenes/ending_scene.tscn::50e43f4169e6c260ad52af133cbff5d6::1717447721::res://.godot/exported/133200997/export-876b5465757619f03ddf93b2cc068a4d-ending_scene.scn
+res://SceneScenes/flashback.tscn::66f20529b8a9e644f4a6c29cd2448f08::1717447594::res://.godot/exported/133200997/export-c27bb4fa6f6fee38d684ea0676a83e23-flashback.scn
+res://SceneScenes/main_menu.tscn::df7fcf9348a8ab1a8529b650351ca132::1717447594::res://.godot/exported/133200997/export-b3395d14a533e2c0b77a093762b25730-main_menu.scn
+res://SceneScenes/wall.tscn::42e3dd121e54cfcbebc4c0f690ae174c::1717447595::res://.godot/exported/133200997/export-68e7fa6f6a4d7cab91fe86bfbadd3da1-wall.scn

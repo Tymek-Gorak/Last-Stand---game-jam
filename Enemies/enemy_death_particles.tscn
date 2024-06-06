@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqmhyn5wetdc"]
+
+[ext_resource type="Texture2D" uid="uid://cxsrgi4c80j2r" path="res://icon.svg" id="1_cvlki"]
+
+[sub_resource type="Curve" id="Curve_jwvf0"]
+bake_resolution = 1000
+_data = [Vector2(0, 0.284047), 0.0, 0.0, 0, 0, Vector2(0.974432, 0.766537), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_fsqaj"]
+width = 36
+curve_y = SubResource("Curve_jwvf0")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fwfic"]
+lifetime_randomness = 0.4
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 70.0
+flatness = 0.17
+initial_velocity_min = 284.1
+initial_velocity_max = 397.72
+directional_velocity_min = 0.0
+directional_velocity_max = 0.0
+directional_velocity_curve = SubResource("CurveXYZTexture_fsqaj")
+gravity = Vector3(0, 98, 0)
+damping_min = 13.636
+damping_max = 28.409
+scale_min = 0.3
+scale_max = 0.4
+
+[node name="EnemyDeathParticles" type="GPUParticles2D"]
+emitting = false
+amount = 24
+process_material = SubResource("ParticleProcessMaterial_fwfic")
+texture = ExtResource("1_cvlki")
+lifetime = 0.6
+one_shot = true
+speed_scale = 1.4
+explosiveness = 0.96
+randomness = 0.43
